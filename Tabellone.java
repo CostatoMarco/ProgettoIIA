@@ -4,7 +4,8 @@ public class Tabellone {
     private int n;
     private int M;
     private Cella[][] celle;
-    private int[][] posizioni;
+    private Cella[] posizioni;
+    private Cella[] fine;
 
     public Tabellone(int n, int M, boolean[] start) throws Exception{
         if(n<M){
@@ -39,6 +40,9 @@ public class Tabellone {
         Random rand = new Random();
         n = rand.nextInt(50)+1;
         M = rand.nextInt(n);
+        if(M==0){
+            M=1;
+        }
         boolean[] start = createBooleanArray(n, M);
         inizializzazioneTabellone(n,start);
     }
@@ -66,16 +70,17 @@ public class Tabellone {
                 }
             }
         }
-        posizioni = new int[M][2];
+        posizioni = new Cella[M];
+        fine = new Cella[M];
         int id = 0;
 
         for(int y = 0; y<n; y++){
             if(start[y]){
                 Veicolo v = new Veicolo(id);              
                 celle[0][y].addStart(v);
-                celle[n][n-1-y].addFinish(v);
-                posizioni[id][1] = 0;
-                posizioni[id][2] = y;
+                celle[n-1][n-1-y].addFinish(v);
+                posizioni[id]= celle[0][y];
+                fine[id] = celle[n-1][n-1-y];
                 id++;
             }
         }
@@ -103,7 +108,13 @@ public class Tabellone {
         return arr;
     }
   
-
+    public int getEuristicaStato(){
+        int tmp = 0;
+        for(int i=0; i<M; i++){
+           tmp = tmp + (int)((Math.abs(posizioni[i].getX()-fine[i].getX()) + Math.abs(posizioni[i].getY()-fine[i].getY()))/2); 
+        }
+        return tmp;
+    }
 
 
 
