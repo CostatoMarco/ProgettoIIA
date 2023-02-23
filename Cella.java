@@ -7,12 +7,12 @@ public class Cella {
     private int x;
     private int y;
     private List<Cella> adiacenti; 
-    boolean start;
-    boolean finish;
-    Veicolo startCar;
-    Veicolo finishCar;
-    boolean occupato;
-    Veicolo occupatoCar;
+    private boolean start;
+    private boolean finish;
+    private Veicolo startCar;
+    private Veicolo finishCar;
+    private boolean occupato;
+    private Veicolo occupatoCar;
 
     public Cella(int x, int y){
         this.x = x;
@@ -58,5 +58,17 @@ public class Cella {
     public void freeCella(){
         occupato = false;
         occupatoCar = null;
+    }
+    public boolean getFinish(){
+        return finish;
+    }
+    public boolean getStart(){
+        return start;
+    }
+    public Veicolo getStartCar(){
+        return startCar;
+    }
+    public Veicolo getFinishCar(){
+        return finishCar;
     }
 }

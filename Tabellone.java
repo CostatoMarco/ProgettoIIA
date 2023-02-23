@@ -194,6 +194,16 @@ public class Tabellone {
         return ret;
     }
 
+    public boolean checkWinCon(){
+        boolean flag = true;
+        for(int i=0; i<posizioni.length; i++){
+            if(posizioni[i].getFinish()==false || posizioni[i].getCar()!=posizioni[i].getFinishCar()){
+                flag = false;
+            }
+        }
+        return flag;
+    }
+
 
     public int getEuristicaStato(){
         int tmp = 0;
