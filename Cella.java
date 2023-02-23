@@ -34,15 +34,29 @@ public class Cella {
     public int getY(){
         return y;
     }
+    public Veicolo getCar(){
+        return occupatoCar;
+    }
+
     public List<Cella> getAdiacenti(){
         return adiacenti;
     }
     public void addStart(Veicolo v){
         start = true;
         startCar = v;
+        occupato = true;
+        occupatoCar = v;
     }
     public void addFinish(Veicolo v){
         finish = true;
         finishCar = v;
+    }
+    public void setOccupato(Veicolo v){
+        occupato = true;
+        occupatoCar = v;
+    }
+    public void freeCella(){
+        occupato = false;
+        occupatoCar = null;
     }
 }

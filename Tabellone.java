@@ -47,6 +47,15 @@ public class Tabellone {
         inizializzazioneTabellone(n,start);
     }
 
+    public Tabellone(Tabellone altro){
+        this.n = altro.getn();
+        this.M = altro.getM();
+        this.celle = altro.getCelle();
+        this.posizioni = altro.getPosizioni();
+        this.fine = altro.getFine();
+
+    }
+
     private void inizializzazioneTabellone(int n,boolean[] start) {
         celle = new Cella[n][n];
         for (int x=0; x<n;x++){
@@ -107,7 +116,85 @@ public class Tabellone {
     
         return arr;
     }
-  
+
+    
+    public Tabellone getNextStato(int id, char d, Tabellone in){
+        Cella cella = in.posizioni[id];
+        Veicolo v = cella.getCar();
+        Tabellone ret = new Tabellone(in);
+        if(d == 'n'){
+            return ret;
+        }
+        else if(d == 'u'){
+            Cella su = ret.celle[cella.getX()][cella.getY()-1];
+            if(cella.getAdiacenti().contains(su)){
+                su.setOccupato(v);
+                ret.celle[cella.getX()][cella.getY()-1] = su;
+                cella.freeCella();
+                ret.celle[cella.getX()][cella.getY()] = cella;
+                ret.posizioni[id]=su;
+            }
+            return ret;
+        }
+        else if(d == 'r'){
+            Cella destra = ret.celle[cella.getX()+1][cella.getY()];
+            if(cella.getAdiacenti().contains(destra)){
+                destra.setOccupato(v);
+                ret.celle[cella.getX()+1][cella.getY()] = destra;
+                cella.freeCella();
+                ret.celle[cella.getX()][cella.getY()]=cella;
+                ret.posizioni[id]=destra;
+            }
+            return ret;
+        }
+        else if(d == 'd'){
+            Cella giu = ret.celle[cella.getX()][cella.getY()+1];
+            if(cella.getAdiacenti().contains(giu)){
+                giu.setOccupato(v);
+                ret.celle[cella.getX()][cella.getY()+1] = giu;
+                cella.freeCella();
+                ret.celle[cella.getX()][cella.getY()]=cella;
+                ret.posizioni[id]=giu;
+            }
+            return ret;
+        }
+        else {
+            Cella sinistra = ret.celle[cella.getX()-1][cella.getY()];
+            if(cella.getAdiacenti().contains(sinistra)){
+                sinistra.setOccupato(v);
+                ret.celle[cella.getX()-1][cella.getY()] = sinistra;
+                cella.freeCella();
+                ret.celle[cella.getX()][cella.getY()]=cella;
+                ret.posizioni[id]=sinistra;
+            }
+            return ret;
+        }
+    }
+
+
+    public Tabellone getNextStato(int[][] ids){
+        Tabellone ret = new Tabellone(this);
+        for(int i=0; i<ids.length;i++){
+            if (ids[i][1]==0){
+                ret=getNextStato(ids[i][0],'n',ret);
+            }
+            else if(ids[i][1]==1){
+                ret=getNextStato(ids[i][0],'u',ret);
+            }
+            else if(ids[i][1]==2){
+                ret=getNextStato(ids[i][0],'r',ret);
+            }
+            else if(ids[i][1]==3){
+                ret=getNextStato(ids[i][0],'d',ret);
+            }
+            else{
+                ret=getNextStato(ids[i][0],'l',ret);
+            }
+        }
+        return ret;
+    }
+
+
     public int getEuristicaStato(){
         int tmp = 0;
         for(int i=0; i<M; i++){
@@ -117,14 +204,19 @@ public class Tabellone {
     }
 
 
-
-
-
-
     public int getn(){
         return n;
     }
     public int getM(){
         return M;
+    }
+    public Cella[][] getCelle(){
+        return celle;
+    }
+    public Cella[] getPosizioni(){
+        return posizioni;
+    }
+    public Cella[] getFine(){
+        return fine;
     }
 }
